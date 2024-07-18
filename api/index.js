@@ -39,3 +39,11 @@ export const fetchQuestions = (token, categoryId) => {
     },
   });
 };
+
+export const fetchDetailQuestions = (token, id) => {
+  return instance.get(`/questions/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
