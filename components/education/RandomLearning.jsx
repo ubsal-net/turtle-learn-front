@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const Selection = () => {
+const RandomLearning = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>ㅎㅇ염 ㅎㅎ</Text>
+      <Text style={styles.text}>랜덤 학습</Text>
     </View>
   );
 };
@@ -14,20 +14,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  logo: {
-    width: 180,
-    height: 170,
-    marginBottom: 20,
+    backgroundColor: "white",
   },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
+    fontSize: 25,
+    fontFamily: "paybooc-Bold",
   },
 });
 
-export default Selection;
+export default RandomLearning;

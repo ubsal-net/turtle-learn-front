@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Animated } from "react-native";
+import { StyleSheet, Animated, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 const SplashScreen = ({ navigation }) => {
   const [logo, setLogo] = useState(
@@ -17,27 +19,27 @@ const SplashScreen = ({ navigation }) => {
       Animated.parallel([
         Animated.timing(logoOpacity, {
           toValue: 0,
-          duration: 700,
+          duration: 500,
           useNativeDriver: false,
         }),
         Animated.timing(textOpacity, {
           toValue: 0,
-          duration: 700,
+          duration: 500,
           useNativeDriver: false,
         }),
         Animated.timing(titleOpacity, {
           toValue: 0,
-          duration: 700,
+          duration: 500,
           useNativeDriver: false,
         }),
         Animated.timing(backgroundColor, {
           toValue: 1,
-          duration: 1000,
+          duration: 700,
           useNativeDriver: false,
         }),
         Animated.timing(textColor, {
           toValue: 1,
-          duration: 1000,
+          duration: 700,
           useNativeDriver: false,
         }),
       ]).start(() => {
@@ -47,26 +49,29 @@ const SplashScreen = ({ navigation }) => {
         Animated.parallel([
           Animated.timing(logoOpacity, {
             toValue: 1,
-            duration: 1000,
+            duration: 500,
             useNativeDriver: false,
           }),
           Animated.timing(textOpacity, {
             toValue: 1,
-            duration: 1000,
+            duration: 500,
             useNativeDriver: false,
           }),
           Animated.timing(titleOpacity, {
             toValue: 1,
-            duration: 1000,
+            duration: 500,
             useNativeDriver: false,
           }),
         ]).start();
       });
-    }, 1000);
+    }, 700);
 
     setTimeout(() => {
-      navigation.replace("Selection");
-    }, 4000);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Selection" }],
+      });
+    }, 2500);
   }, [
     navigation,
     logoOpacity,
@@ -91,6 +96,7 @@ const SplashScreen = ({ navigation }) => {
       <Animated.Image
         source={logo}
         style={[styles.logo, { opacity: logoOpacity }]}
+        resizeMode="contain"
       />
       <Animated.Text
         style={[styles.text, { color: txtColor, opacity: titleOpacity }]}
@@ -113,17 +119,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 180,
-    height: 170,
-    marginBottom: 20,
+    position: "absolute",
+    width: width * 0.3,
+    height: height * 0.3,
+    top: height / 2 - (height * 0.3) / 1.5,
   },
   text: {
-    fontSize: 24,
+    position: "absolute",
+    top: height / 2 + (height * 0.3) / 15,
+    fontSize: width * 0.06,
     fontWeight: "bold",
-    marginBottom: 10,
+    fontFamily: "paybooc-Bold",
   },
   subtitle: {
-    fontSize: 16,
+    position: "absolute",
+    top: height / 2 + (height * 0.1) / 3 + 30,
+    fontSize: width * 0.04,
+    fontFamily: "paybooc-Bold",
   },
 });
 
