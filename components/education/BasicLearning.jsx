@@ -1,4 +1,3 @@
-// BasicLearning.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -9,7 +8,11 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { fetchQuestions, fetchDetailQuestions } from "../../api/index";
+import {
+  fetchQuestions,
+  fetchDetailQuestions,
+  fetchSubmit,
+} from "../../api/index";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../recoil/atoms/authState";
 import QuestionDetail from "../questiondetail/QuestionDetail";
@@ -39,7 +42,28 @@ const BasicLearning = ({ categoryId }) => {
       const response = await fetchDetailQuestions(auth.accessToken, questionId);
       setSelectedQuestion(response.data);
       console.log(response.data);
-      console.log(questionId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleBackPress = () => {
+    setSelectedQuestion(null);
+  };
+
+  const handleSubmit = async (selectionId) => {
+    try {
+      await fetchSubmit(auth.accessToken, selectionId);
+
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((question, index) => {
+          if (question.id === selectedQuestion.id) {
+            return { ...question, solved: true };
+          }
+          return question;
+        })
+      );
+      setSelectedQuestion(null);
     } catch (error) {
       console.error(error);
     }
@@ -52,37 +76,54 @@ const BasicLearning = ({ categoryId }) => {
           <Text style={styles.title}>단계선택</Text>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.grid}>
-              {questions.map((question) => (
-                <TouchableOpacity
-                  key={question.id}
-                  style={styles.cardContainer}
-                  onPress={() => handleCardPress(question.id)}
-                >
-                  <View style={styles.card}>
-                    {question.number === 1 || question.solved ? (
-                      <Text style={styles.number}>{question.number}</Text>
-                    ) : (
-                      <Image
-                        source={require("../../assets/elementals/lock.png")}
-                        style={styles.lockIcon}
-                      />
-                    )}
-                  </View>
-                  <Image
-                    source={
-                      question.solved
-                        ? require("../../assets/elementals/star2.png")
-                        : require("../../assets/elementals/star1.png")
+              {questions.map((question, index) => {
+                const displayedNumber = (index % 20) + 1;
+                return (
+                  <TouchableOpacity
+                    key={question.id}
+                    style={styles.cardContainer}
+                    onPress={
+                      question.solved ||
+                      displayedNumber === 1 ||
+                      index === 0 ||
+                      questions[index - 1]?.solved
+                        ? () => handleCardPress(question.id)
+                        : null
                     }
-                    style={styles.statusIcon}
-                  />
-                </TouchableOpacity>
-              ))}
+                  >
+                    <View style={styles.card}>
+                      {displayedNumber === 1 ||
+                      question.solved ||
+                      index === 0 ||
+                      questions[index - 1]?.solved ? (
+                        <Text style={styles.number}>{displayedNumber}</Text>
+                      ) : (
+                        <Image
+                          source={require("../../assets/elementals/lock.png")}
+                          style={styles.lockIcon}
+                        />
+                      )}
+                    </View>
+                    <Image
+                      source={
+                        question.solved
+                          ? require("../../assets/elementals/star2.png")
+                          : require("../../assets/elementals/star1.png")
+                      }
+                      style={styles.statusIcon}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </ScrollView>
         </>
       ) : (
-        <QuestionDetail questionDetail={selectedQuestion} />
+        <QuestionDetail
+          questionDetail={selectedQuestion}
+          onBackPress={handleBackPress}
+          onSubmit={handleSubmit}
+        />
       )}
     </View>
   );
