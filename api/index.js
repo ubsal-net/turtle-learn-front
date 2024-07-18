@@ -47,3 +47,17 @@ export const fetchDetailQuestions = (token, id) => {
     },
   });
 };
+
+export const fetchSubmit = (token, selectionId) => {
+  return instance.post(
+    "/questions/submissions",
+    {
+      selectionId,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};

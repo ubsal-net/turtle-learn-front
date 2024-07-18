@@ -1,10 +1,44 @@
-// components/questiondetail/QuestionDetail.jsx
-import React from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../recoil/atoms/authState";
+import { fetchSubmit } from "../../api/index";
+import ConfettiCannon from "react-native-confetti-cannon";
 
 const { width, height } = Dimensions.get("window");
 
 const QuestionDetail = ({ questionDetail }) => {
+  const auth = useRecoilValue(authState);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const handleSubmit = async (selectionId) => {
+    try {
+      const response = await fetchSubmit(auth.accessToken, selectionId);
+      console.log(response.data);
+
+      if (response.data.answer) {
+        setShowConfetti(true);
+        Alert.alert("정답입니다!", "축하합니다!", [
+          {
+            text: "OK",
+          },
+        ]);
+      } else {
+        Alert.alert("틀렸습니다", "다시 시도해보세요.", [{ text: "OK" }]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const answerLabels = ["A )", "B )", "C )", "D )"];
 
   return (
@@ -12,10 +46,16 @@ const QuestionDetail = ({ questionDetail }) => {
       <Text style={styles.title}>기초 학습 {questionDetail.number}</Text>
       <View style={styles.topContainer}>
         <View style={styles.answerContainer}>
-          <Text style={styles.question}>{questionDetail.question}</Text>
+          <Text style={styles.question}>
+            {questionDetail.id}. {questionDetail.question}
+          </Text>
         </View>
         {questionDetail.selections.map((selection, index) => (
-          <View key={selection.id} s style={styles.card}>
+          <TouchableOpacity
+            key={selection.id}
+            style={styles.card}
+            onPress={() => handleSubmit(selection.id)}
+          >
             <View style={styles.selectionContainer}>
               <View style={styles.quizContainer}>
                 <Text style={styles.selectionLabel}>
@@ -24,9 +64,10 @@ const QuestionDetail = ({ questionDetail }) => {
                 <Text style={styles.selection}>{selection.content}</Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
+      {showConfetti && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
     </ScrollView>
   );
 };
@@ -44,15 +85,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(125, 107, 185, 0.3)",
-    padding: 20,
+    padding: 30,
     width: "100%",
     borderRadius: 8,
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.045,
     fontFamily: "paybooc-Bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
   card: {
     width: "100%",
@@ -61,23 +102,20 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   question: {
-    fontSize: 20,
     fontFamily: "paybooc-Bold",
     marginBottom: 20,
+    padding: 5,
+    fontSize: 23,
   },
   selectionContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
   },
   selectionLabel: {
     fontSize: 18,
@@ -85,7 +123,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   selection: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "paybooc-Medium",
   },
   quizContainer: {
@@ -94,9 +132,16 @@ const styles = StyleSheet.create({
   answerContainer: {
     backgroundColor: "white",
     flex: 1,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 25,
+    justifyContent: "flex-start",
+    marginBottom: 50,
+    borderRadius: 8,
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
 
