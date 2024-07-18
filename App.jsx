@@ -9,7 +9,6 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { RecoilRoot } from "recoil";
 import Home from "./screens/home/Home";
-import BasicLearning from "./components/education/BasicLearning";
 import SignUp from "./screens/userauth/SignUp";
 import SignIn from "./screens/userauth/SignIn";
 import SplashScreenComponent from "./screens/splash/SplashScreen";
@@ -18,8 +17,10 @@ import Onboarding from "./screens/onboarding/Onboarding";
 import YouthGenderAwareness from "./screens/youthlearn/YouthGenderAwareness";
 import ReadingSpeaking from "./screens/readingspeaking/ReadingSpeaking";
 import LiteracySkills from "./screens/literacyskills/LiteracySkills";
-import { enableScreens } from "react-native-screens";
 import CareerExploration from "./screens/careerexploration/CareerExploration";
+import QuestionDetail from "./components/questiondetail/QuestionDetail";
+
+import { enableScreens } from "react-native-screens";
 
 enableScreens();
 
@@ -66,7 +67,6 @@ const App = () => {
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="BasicLearning" component={BasicLearning} />
           <Stack.Screen
             name="YouthGenderAwareness"
             component={YouthGenderAwareness}
@@ -77,6 +77,7 @@ const App = () => {
             name="CareerExploration"
             component={CareerExploration}
           />
+          <Stack.Screen name="QuestionDetail" component={QuestionDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

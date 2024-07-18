@@ -35,7 +35,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       try {
         const response = await fetchProfile(auth.accessToken);
         const { answerAccuracy, submissionCount } = response.data;
-        setAccuracy(answerAccuracy);
+        setAccuracy(answerAccuracy.toFixed(1));
         setSubmissionCount(submissionCount);
       } catch (error) {
         console.error(error);
