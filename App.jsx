@@ -19,6 +19,7 @@ import YouthGenderAwareness from "./screens/youthlearn/YouthGenderAwareness";
 import ReadingSpeaking from "./screens/readingspeaking/ReadingSpeaking";
 import LiteracySkills from "./screens/literacyskills/LiteracySkills";
 import { enableScreens } from "react-native-screens";
+import CareerExploration from "./screens/careerexploration/CareerExploration";
 
 enableScreens();
 
@@ -72,6 +73,10 @@ const App = () => {
           />
           <Stack.Screen name="ReadingSpeaking" component={ReadingSpeaking} />
           <Stack.Screen name="LiteracySkills" component={LiteracySkills} />
+          <Stack.Screen
+            name="CareerExploration"
+            component={CareerExploration}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </RecoilRoot>

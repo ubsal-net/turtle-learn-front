@@ -1,12 +1,25 @@
+// BasicLearning.js
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { fetchQuestions } from "../../api/index";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { fetchQuestions, fetchDetailQuestions } from "../../api/index";
 import { useRecoilValue } from "recoil";
 import { authState } from "../../recoil/atoms/authState";
+import QuestionDetail from "../questiondetail/QuestionDetail";
+
+const { width, height } = Dimensions.get("window");
 
 const BasicLearning = ({ categoryId }) => {
   const auth = useRecoilValue(authState);
   const [questions, setQuestions] = useState([]);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   useEffect(() => {
     const getQuestions = async () => {
@@ -21,40 +34,79 @@ const BasicLearning = ({ categoryId }) => {
     getQuestions();
   }, [categoryId, auth.accessToken]);
 
+  const handleCardPress = async (questionId) => {
+    try {
+      const response = await fetchDetailQuestions(auth.accessToken, questionId);
+      setSelectedQuestion(response.data);
+      console.log(response.data);
+      console.log(questionId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <View styles={styles.mainContainer}>
-      <Text style={styles.title}>단계선택</Text>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.grid}>
-          {questions.map((question) => (
-            <View key={question.id} style={styles.cardContainer}>
-              <View style={styles.card}>
-                <Text style={styles.number}>{question.number}</Text>
-              </View>
-              <Text style={question.solved ? styles.solved : styles.unsolved}>
-                {question.solved ? "✓" : "✗"}
-              </Text>
+    <View style={styles.mainContainer}>
+      {selectedQuestion === null ? (
+        <>
+          <Text style={styles.title}>단계선택</Text>
+          <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.grid}>
+              {questions.map((question) => (
+                <TouchableOpacity
+                  key={question.id}
+                  style={styles.cardContainer}
+                  onPress={() => handleCardPress(question.id)}
+                >
+                  <View style={styles.card}>
+                    {question.number === 1 || question.solved ? (
+                      <Text style={styles.number}>{question.number}</Text>
+                    ) : (
+                      <Image
+                        source={require("../../assets/elementals/lock.png")}
+                        style={styles.lockIcon}
+                      />
+                    )}
+                  </View>
+                  <Image
+                    source={
+                      question.solved
+                        ? require("../../assets/elementals/star2.png")
+                        : require("../../assets/elementals/star1.png")
+                    }
+                    style={styles.statusIcon}
+                  />
+                </TouchableOpacity>
+              ))}
             </View>
-          ))}
-        </View>
-      </ScrollView>
+          </ScrollView>
+        </>
+      ) : (
+        <QuestionDetail questionDetail={selectedQuestion} />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: width * 0.05,
+  },
   container: {
     flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
-    padding: 20,
+    backgroundColor: "rgba(125, 107, 185, 0.3)",
+    padding: width * 0.05,
+    borderRadius: 8,
   },
   title: {
-    fontSize: 25,
+    fontSize: width * 0.045,
     fontFamily: "paybooc-Bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: height * 0.02,
   },
   grid: {
     flexDirection: "row",
@@ -64,7 +116,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "22%",
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: height * 0.006,
   },
   card: {
     width: "100%",
@@ -83,23 +135,17 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   number: {
-    fontSize: 20,
+    fontSize: width * 0.06,
     fontFamily: "paybooc-Bold",
   },
-  solved: {
-    fontSize: 18,
-    color: "green",
-    fontFamily: "paybooc-Medium",
+  statusIcon: {
+    width: width * 0.055,
+    height: height * 0.025,
     marginTop: 5,
   },
-  unsolved: {
-    fontSize: 18,
-    color: "red",
-    fontFamily: "paybooc-Medium",
-    marginTop: 5,
-  },
-  mainContainer: {
-    flex: 1,
+  lockIcon: {
+    width: width * 0.08,
+    height: height * 0.04,
   },
 });
 

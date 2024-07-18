@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Sidebar from "../sidebar/Sidebar";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 const Header = ({ title, backTo }) => {
   const navigation = useNavigation();
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 10,
     paddingTop: height * 0.045,
-    marginTop: height * 0.02,
     backgroundColor: "white",
   },
   backButton: {
