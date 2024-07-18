@@ -17,7 +17,7 @@ const OnboardingScreen = ({ navigation }) => {
     if (currentIndex < 3) {
       swiperRef.current.scrollBy(1);
     } else {
-      navigation.replace("SignIn");
+      navigation.navigate("Selection");
     }
   };
 

@@ -97,7 +97,15 @@ const Home = ({ navigation }) => {
               style={styles.cardImage}
             />
           </TouchableOpacity>
-          <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate("CareerExploration", {
+                title: "진로 탐색",
+                categoryId: 4,
+              })
+            }
+          >
             <Text style={styles.cardTitle}>진로 탐색</Text>
             <View style={styles.subTitleContainer}>
               <Text style={styles.cardSubtitle}>
@@ -108,7 +116,7 @@ const Home = ({ navigation }) => {
               source={require("../../assets/home/fourth.jpg")}
               style={styles.cardImage}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
