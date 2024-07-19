@@ -6,8 +6,12 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { fetchRandomQuestion } from "../../api/ai";
+import { useRecoilValue } from "recoil";
+import { authState } from "../../recoil/atoms/authState";
+import { fetchRandomQuestionSubmit } from "../../api/index";
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,8 +19,8 @@ const RandomLearning = ({ categoryId }) => {
   const [randomQuestion, setRandomQuestion] = useState({
     question: "",
     selections: [],
-    answer: "",
   });
+  const auth = useRecoilValue(authState);
 
   useEffect(() => {
     const getQuestion = async () => {
@@ -29,7 +33,27 @@ const RandomLearning = ({ categoryId }) => {
       }
     };
     getQuestion();
-  }, []);
+  }, [categoryId]);
+
+  const handleAnswerPress = async (selection) => {
+    try {
+      const response = await fetchRandomQuestionSubmit(auth.accessToken, {
+        categoryId,
+        question: randomQuestion.question,
+        selections: randomQuestion.selections,
+      });
+      console.log(response.data);
+      if (selection.answer) {
+        Alert.alert("정답입니다!", "축하합니다!");
+      } else {
+        Alert.alert("틀렸습니다", "다시 시도해보세요.");
+      }
+      const newResponse = await fetchRandomQuestion(categoryId);
+      setRandomQuestion(newResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const answerLabels = ["A )", "B )", "C )", "D )"];
 
@@ -45,13 +69,17 @@ const RandomLearning = ({ categoryId }) => {
             <Text style={styles.question}>{randomQuestion.question}</Text>
           </View>
           {randomQuestion.selections.map((selection, index) => (
-            <TouchableOpacity key={index} style={styles.card}>
+            <TouchableOpacity
+              key={index}
+              style={styles.card}
+              onPress={() => handleAnswerPress(selection)}
+            >
               <View style={styles.selectionContainer}>
                 <View style={styles.quizContainer}>
                   <Text style={styles.selectionLabel}>
                     {answerLabels[index]}{" "}
                   </Text>
-                  <Text style={styles.selection}>{selection}</Text>
+                  <Text style={styles.selection}>{selection.content}</Text>
                 </View>
               </View>
             </TouchableOpacity>
