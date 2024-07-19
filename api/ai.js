@@ -1,7 +1,10 @@
+import { useRecoilValue } from "recoil";
 import axios from "axios";
+import { AI_URL } from "@env";
+import { userState } from "../recoil/atoms/authState";
 
 const instance = axios.create({
-  baseURL: "http://43.200.245.55:9000",
+  baseURL: AI_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,26 +14,20 @@ export const fetchRandomQuestion = (categoryId) => {
   return instance.get(`/question/random?category=${categoryId}`);
 };
 
-export const fetchRandomQuestionSubmit = (token, data) => {
-  return instance.post("/random-questions", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
+export const useFetchFirstAIResponse = () => {
+  const user = useRecoilValue(userState);
 
-export const fetchRandomQuestionSaved = (token, id) => {
-  return instance.get(`/random-questions/${id}`);
-};
+  const fetchFirstAIResponse = async () => {
+    return instance.get(
+      `/setting/ai?age=${user.age}&username=${user.name}&sex=${user.sex}&uuid=`
+    );
+  };
 
-export const fetchFirstAIResponse = () => {
-  return instance.get(
-    "/ai?message=나는 10살 남자 김민규야 경계선 지능을 가지고 있지, 너는 이제부터 나의 페르소나가 되어서 나의 진로탐색을 도와주어야해&uuid="
-  );
+  return fetchFirstAIResponse;
 };
 
 export const fetchSecondAIResponse = (message, uuid) => {
-  return instance.get(`/ai?message=${message}&uuid=${uuid}`);
+  return instance.get(`/chat/ai?message=${message}&uuid=${uuid}`);
 };
 
 export const fetchExitAIResponse = (uuid) => {
