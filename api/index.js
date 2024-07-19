@@ -61,3 +61,11 @@ export const fetchSubmit = (token, selectionId) => {
     }
   );
 };
+
+export const fetchRandomQuestionSubmit = (token, data) => {
+  return instance.post("/random-questions", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

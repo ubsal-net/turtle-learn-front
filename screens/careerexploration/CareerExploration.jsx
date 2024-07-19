@@ -8,29 +8,44 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Alert,
 } from "react-native";
 import Header from "../../components/header/Header";
 import { LinearGradient } from "expo-linear-gradient";
-import { fetchFistAIResponse } from "../../api/ai";
+import {
+  fetchExitAIResponse,
+  fetchFirstAIResponse,
+  fetchSecondAIResponse,
+} from "../../api/ai";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
 const CareerExploration = ({ route }) => {
+  const navigation = useNavigation();
   const { title } = route.params;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [uuid, setUuid] = useState("");
   const flatListRef = useRef();
 
   useEffect(() => {
-    try {
-      const getAi = async () => {
-        const response = await fetchFistAIResponse();
-        console.log(response.data);
-      };
-      getAi();
-    } catch (error) {
-      console.log(error);
-    }
+    const getInitialAIResponse = async () => {
+      try {
+        const response = await fetchFirstAIResponse();
+        const initialMessage = {
+          id: "0",
+          text: response.data.message,
+          sender: "ai",
+        };
+        setUuid(response.data.uuid);
+        setMessages([initialMessage]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getInitialAIResponse();
   }, []);
 
   const handleSendMessage = async () => {
@@ -44,10 +59,10 @@ const CareerExploration = ({ route }) => {
       setMessage("");
 
       try {
-        const response = await fetchSecondAIResponse(message);
+        const response = await fetchSecondAIResponse(message, uuid);
         const responseMessage = {
           id: (messages.length + 1).toString(),
-          text: response.data.response,
+          text: response.data.message,
           sender: "ai",
         };
         setMessages((prevMessages) => [...prevMessages, responseMessage]);
@@ -61,6 +76,18 @@ const CareerExploration = ({ route }) => {
         setMessages((prevMessages) => [...prevMessages, errorMessage]);
         flatListRef.current.scrollToEnd({ animated: true });
       }
+    }
+  };
+
+  const exitHandler = async (uuid) => {
+    try {
+      const response = await fetchExitAIResponse(uuid);
+      console.log(uuid);
+      console.log(response.data);
+      Alert.alert("대화 종료", "대화가 종료되었습니다.");
+      navigation.navigate(Home);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -108,7 +135,10 @@ const CareerExploration = ({ route }) => {
           onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
         />
         {messages.length > 0 && (
-          <TouchableOpacity style={styles.endChatButton}>
+          <TouchableOpacity
+            style={styles.endChatButton}
+            onPress={() => exitHandler(uuid)}
+          >
             <Text style={styles.endChatButtonText}>대화 종료</Text>
           </TouchableOpacity>
         )}
