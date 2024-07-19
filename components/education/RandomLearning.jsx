@@ -27,7 +27,6 @@ const RandomLearning = ({ categoryId }) => {
       try {
         const response = await fetchRandomQuestion(categoryId);
         setRandomQuestion(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -62,7 +61,7 @@ const RandomLearning = ({ categoryId }) => {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>랜덤 학습</Text>
         <Text style={styles.subTitle}>
-          학습자의 수준에 맞춰 랜덤으로 문제가 출력됩니다.
+          학습자의 수준에 맞춰 AI가 랜덤으로 문제가 출력합니다!
         </Text>
         <View style={styles.topContainer}>
           <View style={styles.answerContainer}>

@@ -14,7 +14,7 @@ import Header from "../../components/header/Header";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   fetchExitAIResponse,
-  fetchFirstAIResponse,
+  useFetchFirstAIResponse,
   fetchSecondAIResponse,
 } from "../../api/ai";
 import { useNavigation } from "@react-navigation/native";
@@ -28,6 +28,7 @@ const CareerExploration = ({ route }) => {
   const [messages, setMessages] = useState([]);
   const [uuid, setUuid] = useState("");
   const flatListRef = useRef();
+  const fetchFirstAIResponse = useFetchFirstAIResponse();
 
   useEffect(() => {
     const getInitialAIResponse = async () => {
@@ -85,7 +86,7 @@ const CareerExploration = ({ route }) => {
       console.log(uuid);
       console.log(response.data);
       Alert.alert("대화 종료", "대화가 종료되었습니다.");
-      navigation.navigate(Home);
+      navigation.navigate("Home");
     } catch (error) {
       console.log(error);
     }
@@ -162,7 +163,7 @@ const CareerExploration = ({ route }) => {
                 style={styles.sendButton}
               >
                 <Image
-                  source={require("../../assets/elementals/profile.png")}
+                  source={require("../../assets/elementals/sendbtn.png")}
                   style={styles.sendIcon}
                 />
               </TouchableOpacity>
@@ -258,9 +259,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   sendIcon: {
-    width: 24,
-    height: 24,
-    tintColor: "white",
+    width: width * 0.067,
+    height: height * 0.03,
   },
   endChatButton: {
     position: "absolute",
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
   endChatButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "paybooc-Bold",
   },
 });

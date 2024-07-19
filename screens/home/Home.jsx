@@ -109,7 +109,7 @@ const Home = ({ navigation }) => {
             <Text style={styles.cardTitle}>진로 탐색</Text>
             <View style={styles.subTitleContainer}>
               <Text style={styles.cardSubtitle}>
-                자신을 좀 더 알아가는{"\n"} 것에 대해 학습해요!
+                자신을 좀 더 알아가는{"\n"} 시간을 가져봐요!
               </Text>
             </View>
             <Image
