@@ -7,7 +7,7 @@ const SplashScreen = ({ navigation }) => {
   const [logo, setLogo] = useState(
     require("../../assets/splash/SplashLogo1.png")
   );
-  const [message, setMessage] = useState("대충 간단한 한 줄짜리 힘되는 말");
+  const [message, setMessage] = useState("인생은 속도가 아닌 방향");
   const logoOpacity = useRef(new Animated.Value(1)).current;
   const textOpacity = useRef(new Animated.Value(1)).current;
   const titleOpacity = useRef(new Animated.Value(1)).current;
@@ -44,7 +44,7 @@ const SplashScreen = ({ navigation }) => {
         }),
       ]).start(() => {
         setLogo(require("../../assets/splash/SplashLogo2.png"));
-        setMessage("대충 바뀐 간단한 한 줄짜리 힘되는 말");
+        setMessage("인생은 속도가 아닌 방향");
 
         Animated.parallel([
           Animated.timing(logoOpacity, {

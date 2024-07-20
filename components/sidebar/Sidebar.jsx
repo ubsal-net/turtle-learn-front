@@ -16,8 +16,8 @@ import Animated, {
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import VeryShortBtn from "../../components/buttons/VeryShortBtn";
 import { handleLogout } from "../../utils/reject";
-import { useRecoilValue } from "recoil";
-import { authState } from "../../recoil/atoms/authState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState, userState } from "../../recoil/atoms/authState";
 import { fetchProfile } from "../../api/index";
 
 const { width, height } = Dimensions.get("window");
@@ -27,6 +27,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const overlayOpacity = useSharedValue(0);
   const logout = handleLogout();
   const auth = useRecoilValue(authState);
+  const setUser = useSetRecoilState(userState);
   const [accuracy, setAccuracy] = useState(0);
   const [submissionCount, setSubmissionCount] = useState(0);
 
@@ -34,9 +35,18 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const getProfile = async () => {
       try {
         const response = await fetchProfile(auth.accessToken);
-        const { answerAccuracy, submissionCount } = response.data;
+        const { name, age, sex, answerAccuracy, submissionCount } =
+          response.data;
         setAccuracy(answerAccuracy.toFixed(1));
         setSubmissionCount(submissionCount);
+
+        setUser({
+          name,
+          age,
+          sex,
+          answerAccuracy,
+          submissionCount,
+        });
       } catch (error) {
         console.error(error);
       }
@@ -45,7 +55,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     if (isOpen) {
       getProfile();
     }
-  }, [isOpen, auth.accessToken]);
+  }, [isOpen, auth.accessToken, setUser]);
 
   useEffect(() => {
     translateX.value = isOpen ? withTiming(0) : withTiming(width);

@@ -1,12 +1,14 @@
 import axios from "axios";
+import { API_URL } from "@env";
 
 const instance = axios.create({
-  baseURL: "http://146.56.109.210:8080",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+// 회원가입
 export const fetchSignup = ({ username, password, name, age, sex }) => {
   return instance.post("/users", {
     username,
@@ -17,6 +19,7 @@ export const fetchSignup = ({ username, password, name, age, sex }) => {
   });
 };
 
+// 로그인
 export const fetchLogin = ({ username, password }) => {
   return instance.post("/auths/login", {
     username,
@@ -24,6 +27,7 @@ export const fetchLogin = ({ username, password }) => {
   });
 };
 
+// 사이드바 + 페르소나 프롬프트를 위한 사용자 정보
 export const fetchProfile = (token) => {
   return instance.get("/users", {
     headers: {
@@ -32,6 +36,7 @@ export const fetchProfile = (token) => {
   });
 };
 
+// 문제
 export const fetchQuestions = (token, categoryId) => {
   return instance.get(`/questions?categoryId=${categoryId}`, {
     headers: {
@@ -40,6 +45,7 @@ export const fetchQuestions = (token, categoryId) => {
   });
 };
 
+// 상세 문제
 export const fetchDetailQuestions = (token, id) => {
   return instance.get(`/questions/${id}`, {
     headers: {
@@ -48,6 +54,7 @@ export const fetchDetailQuestions = (token, id) => {
   });
 };
 
+// 기초 학습 정답 제출
 export const fetchSubmit = (token, selectionId) => {
   return instance.post(
     "/questions/submissions",
@@ -60,4 +67,22 @@ export const fetchSubmit = (token, selectionId) => {
       },
     }
   );
+};
+
+// 랜던 문제 정답 제출
+export const fetchRandomQuestionSubmit = (token, data) => {
+  return instance.post("/random-questions", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+// 저장 문제 호출
+export const fetchRandomQuestion = (token) => {
+  return instance.get("/random-questions", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };

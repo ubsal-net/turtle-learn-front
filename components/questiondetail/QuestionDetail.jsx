@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(125, 107, 185, 0.3)",
-    padding: 30,
+    padding: 20,
     width: "100%",
     borderRadius: 8,
   },
@@ -93,7 +93,12 @@ const styles = StyleSheet.create({
     fontSize: width * 0.045,
     fontFamily: "paybooc-Bold",
     textAlign: "center",
+    marginBottom: height * 0.015,
+  },
+  subTitle: {
+    fontSize: width * 0.035,
     marginBottom: height * 0.02,
+    fontFamily: "paybooc-Medium",
   },
   card: {
     width: "100%",
@@ -123,11 +128,13 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   selection: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: "paybooc-Medium",
+    flexShrink: 1,
   },
   quizContainer: {
     flexDirection: "row",
+    flexWrap: "wrap",
   },
   answerContainer: {
     backgroundColor: "white",
