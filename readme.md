@@ -8,7 +8,7 @@ Turtlearn은 **경계선 지능인**을 위한 평생 교육 프로그램을 **�
 
 ---
 
-### **📺 YouTube 소개 영상**  
+### **📺 YouTube 시연 영상**  
 [![Turtlrun Project Video](https://img.youtube.com/vi/nIzAK50_qOs/0.jpg)](https://www.youtube.com/watch?v=nIzAK50_qOs)  
 **[YouTube에서 보기](https://www.youtube.com/watch?v=nIzAK50_qOs)**
 
