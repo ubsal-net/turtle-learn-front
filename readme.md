@@ -1,15 +1,15 @@
-# **Turtlearn (터틀런)**
+# **Turtlelearn (터틀런)**
 
 ---
 
 ## **프로젝트 개요**  
-Turtlearn은 **경계선 지능인**을 위한 평생 교육 프로그램을 **전국적으로 확산**하기 위해 개발된 앱입니다.  
+Turtlelearn **경계선 지능인**을 위한 평생 교육 프로그램을 **전국적으로 확산**하기 위해 개발된 앱입니다.  
 이 프로그램은 반복적인 학습과 훈련을 통해 **소통 능력과 자립을 지원**하며, 서울시에 한정된 교육 프로그램을 디지털화하여 **언제 어디서나 학습 기회를 제공**하는 것을 목표로 합니다.
 
 ---
 
 ### **📺 YouTube 시연 영상**  
-[![Turtlrun Project Video](https://img.youtube.com/vi/nIzAK50_qOs/0.jpg)](https://www.youtube.com/watch?v=nIzAK50_qOs)  
+[![Turtlelearn Project Video](https://img.youtube.com/vi/nIzAK50_qOs/0.jpg)](https://www.youtube.com/watch?v=nIzAK50_qOs)  
 **[YouTube에서 보기](https://www.youtube.com/watch?v=nIzAK50_qOs)**
 
 ---
